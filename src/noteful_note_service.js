@@ -33,6 +33,13 @@ const NoteService = {
             .where('id', `${newListId}`)
     },
 
+    getNoteById(knex, id) {
+        return knex
+            .from('notes')
+            .select('*')
+            .where({'id', id})
+            .first()
+    },
 
     deleteNote(knex, noteId) {
         return knex('notes')

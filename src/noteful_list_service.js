@@ -28,8 +28,16 @@ const ListService = {
             // .on('query-error', function(res, obj, builder))
     },
     
+    getListById(knex, id){
+        return knex
+            .from('notes')
+            .select('*')
+            .where('id', id)
+            .first();
+    },
+    
     // Delete
-    delete(knex, listId) {
+    deleteList(knex, listId) {
         return knex('lists')
             .del()
             .where('.id',`${listId}`);
