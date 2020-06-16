@@ -1,0 +1,3 @@
+TRUNCATE TABLE notes;
+
+TRUNCATE TABLE lists;
