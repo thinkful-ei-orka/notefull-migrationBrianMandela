@@ -1,3 +1,7 @@
+TRUNCATE TABLE notes;
+
+TRUNCATE TABLE lists;
+
 BEGIN;
 
 INSERT INTO lists (list_name)
