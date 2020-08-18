@@ -41,7 +41,7 @@ listsRouter
         newList.list_name = list_name
 
         ListService.createList(
-            req.app.get('db')
+            req.app.get('db'),
             newList
         )
             .then(list => {
