@@ -37,7 +37,7 @@ const NoteService = {
         return knex
             .from('notes')
             .select('*')
-            .where({'id', id})
+            .where('id', `${id}`)
             .first()
     },
 
