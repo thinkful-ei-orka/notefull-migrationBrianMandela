@@ -38,7 +38,7 @@ const NoteService = {
             .from('notes')
             .select('*')
             .where('id', `${id}`)
-            .first()
+            .first();
     },
 
     deleteNote(knex, noteId) {
