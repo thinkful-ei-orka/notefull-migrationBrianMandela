@@ -1,50 +1,32 @@
 /* eslint-disable indent */
-const ListService = {
+const FolderService = {
     // R ead
-    getAllList(knex) {
+    getAllFolders(knex) {
         return knex
-            .select('*')
             .from('lists')
-            .then(data => {
-                return data;
-            });
+            .select('*');
     },
 
     // C reate
-    createList(knex, listName) {
+    createFolder(knex, folderName) {
         return knex('lists')
-            .insert({list_name: `${listName}`});
-            // ^^what confirmation can we receive from insertion to relay as part of service
-            // .on('query-repsonse', function(res obj, builder))
-            // .on('query-error', function(res, obj, builder))
+            .insert({
+                list_name: `${folderName}`
+            });
+            // .then(data => {
+            //     return data;
+            // });
+        // ^^what confirmation can we receive from insertion to relay as part of service
+        // .on('query-repsonse', function(res obj, builder))
+        // .on('query-error', function(res, obj, builder))
     },
 
-    // U pdate
-    udpateListName(knex, listId, newListName) {
-        return knex('lists')
-            .update({listname: `${newListName}`})
-            .where('id',`${listId}`);
-            // .on('query-repsonse', function(res obj, builder))
-            // .on('query-error', function(res, obj, builder))
-    },
-    
-    getListById(knex, id){
-        return knex
-            .from('notes')
-            .select('*')
-            .where('id', id)
-            .first();
-    },
-    
-    // Delete
-    deleteList(knex, listId) {
-        return knex('lists')
-            .del()
-            .where('.id',`${listId}`);
-            // .on('query-repsonse', function(res obj, builder))
-            // .on('query-error', function(res, obj, builder))
+    serializeFolder(folder) {
+        return {
+            id: folder.id,
+            name: folder.list_name,
+        };
     }
 };
 
-
-module.exports = ListService;
+module.exports = FolderService;

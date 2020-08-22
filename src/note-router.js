@@ -10,19 +10,43 @@ const jsonParser = express.json();
 const bodyParser = express.json();
 const logger = require('./logger');
 
-const serializeNote = note => ({
-    id: note.id,
-    noteName: xss(note.note_name),
-    content: xss(note.content),
-    modified: xss(note.modified),
-    list: xss(note.list)
-});
 
-noteRouter
-    .route('/')
-    .get((req, res) => {
-        return res
-            .json(notes);
+
+noteRouter.route('/')
+    .get((req, res, next) => {
+        const DB = req.app.get('db')
+        NoteService.getAllNotes(DB)
+            .then(notes => {
+                res.json(notes.map((note) => NoteService.serializeNote(note)));
+            })
+            .catch(next);
+    })
+
+    .post(jsonParser, (req, res, next) => {
+        const DB = req.app.get('db');
+        console.log('req body here:',req.body)
+        const {
+            name,
+            content,
+            modified,
+            folderId
+        } = req.body;
+        NoteService.createNote(DB, name, content, modified, folderId)
+            .then(note => {
+                res.json(() => NoteService.serializeNote(note));
+            })
+            .catch(next);
     });
-    
+
+noteRouter.route('/:note_id')
+
+    .delete((req, res, next) => {
+        const DB = req.app.get('db');
+        NoteService.deleteNote(DB, req.params.note_id)
+            .then(note => {
+                res.status(204).send();
+            })
+            .catch(next);
+    });
+
 module.exports = noteRouter;

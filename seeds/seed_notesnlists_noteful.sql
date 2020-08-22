@@ -1,6 +1,5 @@
-TRUNCATE TABLE notes;
+TRUNCATE TABLE notes, lists;
 
-TRUNCATE TABLE lists;
 
 BEGIN;
 
