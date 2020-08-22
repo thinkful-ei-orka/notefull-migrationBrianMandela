@@ -21,8 +21,8 @@ app.use(cors());
 app.use(helmet());
 
   
-  app.use('notes', noteRouter);
-  app.use('folders', folderRouter);
+  app.use('/notes', noteRouter);
+  app.use('/folders', folderRouter);
   
   app.use(function errorHandler(error, req, res, next) {
     let response;
