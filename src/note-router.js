@@ -33,7 +33,7 @@ noteRouter.route('/')
         } = req.body;
         NoteService.createNote(DB, name, content, modified, folderId)
             .then(note => {
-                res.json(() => NoteService.serializeNote(note));
+                res.status(201).json(() => NoteService.serializeNote(note));
             })
             .catch(next);
     });
@@ -44,7 +44,7 @@ noteRouter.route('/:note_id')
         const DB = req.app.get('db');
         NoteService.deleteNote(DB, req.params.note_id)
             .then(note => {
-                res.status(204).send();
+                res.status(204).end();
             })
             .catch(next);
     });
