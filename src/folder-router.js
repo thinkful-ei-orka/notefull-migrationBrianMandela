@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const xss = require('xss');
 const FolderService = require('./noteful_folder_service');
+const NoteService = require('./noteful_note_service');
 
 const folderRouter = express.Router();
 const jsonParser = express.json();
@@ -18,15 +19,13 @@ const serializeList = list => ({
 
 folderRouter.route('/')
     .get((req, res, next) => {
-        const DB = req.app.get('db')
-        console.log('getting folders')
+        const DB = req.app.get('db');
 
         FolderService.getAllFolders(DB)
             .then(folders => {
                 res.json(folders.map((folder) => FolderService.serializeFolder(folder)))
             })
             .then(
-                console.log('folders sent')
             )
             .catch(next)
     })
@@ -35,9 +34,10 @@ folderRouter.route('/')
         const {
             name
         } = req.body;
+        console.log('req body from POST folder:', req.body);
         const newFolder = name;
 
-        console.log('preparing folder');
+        console.log('Preping folder with name:', newFolder);
 
         for (const [key, value] of Object.entries(newFolder)) {
             if (value == null) {
@@ -52,9 +52,10 @@ folderRouter.route('/')
         FolderService.createFolder(DB, newFolder)
 
             .then((folder) => {
+                let folderForClient = FolderService.serializeFolder(folder[0]);
                 res
                     .status(201)
-                    .json(FolderService.serializeFolder(folder));
+                    .json(folderForClient);
             })
             .catch(next);
 
@@ -63,25 +64,26 @@ folderRouter.route('/')
 
 
         console.log('folder created and notification sent')
+    });
+
+folderRouter.route('/:folder_id')
+    .get((req, res, next) => {
+        const DB = req.app.get('db');
+        console.log('folder id to reference:',req.params.folder_id);
+        NoteService.getFolderNotes(
+            DB,
+            req.params.folder_id
+        )
+        .then(notes => {
+            console.log('data from getFolderNotes service', notes);
+            if (notes.length === 0 ) {
+                console.log('Sending notes not found error');
+                res.status(404).json({error: `Notes do not exist for folder`})
+            }
+            res.status(200).json(notes.map((note) => NoteService.serializeNote(note)))
+        })
+        .catch(next);
     })
-// folderRouter
-//     .route('/:folder_id')
-//     .all((req, res, next) => {
-//         ListService.getListById(
-//             req.app.get('db'),
-//             req.params.list_id
-//         )
-//         .then(list => {
-//             if (!list) {
-//                 return res.status(404).json({
-//                     error: { message: `User doesn't exist` }
-//                 })
-//             }
-//             res.list = list
-//             next()
-//         })
-//         .catch(next)
-//     })
 //     .get((req, res, next) => {
 //         res.json(serializeList(res.list))
 //     })
@@ -93,8 +95,8 @@ folderRouter.route('/')
 //         .then(numRowsAffected => {
 //             res.status(204).end()
 //         })
-//         .catch(next)
-//     })
+        // .catch(next)
+    // })
 
 
 

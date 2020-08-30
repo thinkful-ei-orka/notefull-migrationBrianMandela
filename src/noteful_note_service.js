@@ -9,7 +9,13 @@ const NoteService = {
             // .then(data => {
             //     return data;
             // });
+    },
 
+    getFolderNotes(knex, folderId) {
+        return knex
+            .from('notes')
+            .select('*')
+            .where('list', `${folderId}`)
     },
 
     // C reate

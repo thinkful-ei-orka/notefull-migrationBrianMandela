@@ -12,14 +12,12 @@ const FolderService = {
         return knex('lists')
             .insert({
                 list_name: `${folderName}`
-            });
-            // .then(data => {
-            //     return data;
-            // });
-        // ^^what confirmation can we receive from insertion to relay as part of service
-        // .on('query-repsonse', function(res obj, builder))
-        // .on('query-error', function(res, obj, builder))
+            })
+            .returning('*');
     },
+
+
+    // deleteSpecFolder(),
 
     serializeFolder(folder) {
         return {
