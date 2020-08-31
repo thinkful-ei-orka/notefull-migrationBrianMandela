@@ -54,7 +54,7 @@ folderRouter.route('/')
             .then((folder) => {
                 let folderForClient = FolderService.serializeFolder(folder[0]);
                 res
-                    .status(201)
+                    .status(200)
                     .json(folderForClient);
             })
             .catch(next);

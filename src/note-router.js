@@ -44,7 +44,7 @@ noteRouter.route('/')
         }
         NoteService.createNote(DB, name, content, folderId)
             .then(note => {
-                res.status(201).json(NoteService.serializeNote(note[0]));
+                res.status(200).json(NoteService.serializeNote(note[0]));
             })
             .catch(next);
     });
