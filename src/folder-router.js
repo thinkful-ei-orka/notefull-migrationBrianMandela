@@ -80,7 +80,9 @@ folderRouter.route('/:folder_id')
                 console.log('Sending notes not found error');
                 res.status(404).json({error: `Notes do not exist for folder`})
             }
+            else {
             res.status(200).json(notes.map((note) => NoteService.serializeNote(note)))
+            }
         })
         .catch(next);
     })

@@ -18,14 +18,22 @@ const NoteService = {
             .where('list', `${folderId}`)
     },
 
+    getSpecNote(knex, noteId) {
+        return knex
+            .from('notes')
+            .select('*')
+            .where('id', `${noteId}`);
+    },
+
     // C reate
-    createNote(knex, noteName, content, modified, list) {
+    createNote(knex, noteName, content, folderId) {
         return knex('notes')
             .insert({
                 note_name: `${noteName}`,
                 content: `${content}`,
-                list: `${list}`
-            });
+                list: `${folderId}`
+            })
+            .returning('*');
     },
 
     // D elete
